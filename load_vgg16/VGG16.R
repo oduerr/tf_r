@@ -54,7 +54,8 @@ sess = tf$Session()
 restorer$restore(sess, '/Users/oli/Dropbox/server_sync/tf_slim_models/vgg_16.ckpt')
 
 library(jpeg)
-img1 <- readJPEG('apple.jpg')
+
+img1 <- readJPEG('poodle.jpg')
 d = dim(img1)
 imgs = array(255*img1, dim = c(1, d[1], d[2], d[3]))
 
@@ -63,10 +64,19 @@ imgs[1,200,200:205,1] #In python Some pixels [152 153 151 150 152 155]
 fc8_vals = sess$run(fc8, dict(images = imgs))
 fc8_vals[1:5] #In python [-2.86833096  0.7060132  -1.32027602 -0.61107934 -1.67312801]
 probs = exp(fc8_vals)/sum(exp(fc8_vals))
-idx = sort.int(fc8_vals, index.return = TRUE, decreasing = TRUE)$ix[1:10]
 
+idx = sort.int(fc8_vals, index.return = TRUE, decreasing = TRUE)$ix[1:5]
+
+# Reading the class names
 library(readr)
 names = read_delim("imagenet_classes.txt", "\t", escape_double = FALSE, trim_ws = TRUE,col_names = FALSE)
-for (id in idx){
-  cat(id, probs[id], names[id,][[1]],'\n')
+
+### Graph
+library(grid)
+g = rasterGrob(img1, interpolate=TRUE) 
+text = ""
+for (id in idx) {
+  text = paste0(text, names[id,][[1]], " ", round(probs[id],5), "\n") 
 }
+ggplot(data.frame(d=1:3)) + annotation_custom(g) + 
+  annotate('text',x=0.05,y=0.05,label=text, size=7, hjust = 0, vjust=0, color='gray90') + xlim(0,1) + ylim(0,1) 
