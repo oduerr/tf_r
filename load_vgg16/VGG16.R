@@ -49,8 +49,6 @@ for (dd in variables_to_restore){
   print(dd$name)
 }
 
-#d = slim$assign_from_checkpoint('/Users/oli/Dropbox/server_sync/tf_slim_models/vgg_16.ckpt', variables_to_restore)
-
 restorer = tf$train$Saver()
 sess = tf$Session()
 restorer$restore(sess, '/Users/oli/Dropbox/server_sync/tf_slim_models/vgg_16.ckpt')
@@ -61,14 +59,14 @@ d = dim(img1)
 imgs = array(255*img1, dim = c(1, d[1], d[2], d[3]))
 
 # Test comparison with python code
-imgs[1,200,200:205,1] #In python Some pixels [201 202 198 188 189 185]
+imgs[1,200,200:205,1] #In python Some pixels [152 153 151 150 152 155]
 fc8_vals = sess$run(fc8, dict(images = imgs))
-fc8_vals[1:5] #In python [-4.18968439  1.16550434 -1.50405121 -3.15936828 -3.20157099]
+fc8_vals[1:5] #In python [-2.86833096  0.7060132  -1.32027602 -0.61107934 -1.67312801]
 probs = exp(fc8_vals)/sum(exp(fc8_vals))
 idx = sort.int(fc8_vals, index.return = TRUE, decreasing = TRUE)$ix[1:10]
 
 library(readr)
 names = read_delim("imagenet_classes.txt", "\t", escape_double = FALSE, trim_ws = TRUE,col_names = FALSE)
 for (id in idx){
-  cat(id, fc8_vals[id], names[id,][[1]],'\n')
+  cat(id, probs[id], names[id,][[1]],'\n')
 }
