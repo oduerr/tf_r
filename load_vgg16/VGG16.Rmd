@@ -2,26 +2,30 @@
 title: "Image Classification in R using trained TensorFlow models"
 author: "Oliver Dürr"
 date: "11/6/2016"
-output: github_document
+output: 
+  html_document
+self_contained: FALSE
 ---
 ```{r setup, include=FALSE}
+#output: github_document
 #output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Recently RStudio released a [package](https://rstudio.github.io/tensorflow/) allowing to use TensorFlow in R. Also recently several trained models for images classification have been [released](https://github.com/tensorflow/models/blob/master/slim/README.md#Pretrained). In this  post I describe how to use the VGG16 model in R to produce an image classification like 
+Recently RStudio has released a [package](https://rstudio.github.io/tensorflow/) that allows to use TensorFlow in R. Also recently several trained models for image classification have been [released](https://github.com/tensorflow/models/blob/master/slim/README.md#Pretrained). In this  post I describe how to use the VGG16 model in R to produce an image classification like this:
+
 ![](poodle_result.png)
 (image taken from: https://www.flickr.com/photos/jonner/487461265)
 
 
-The code is available on [github](https://github.com/oduerr/tf_r/tree/master/load_vgg16) in that directory there also a python file (`load_vgg16.py`) for checking the validity of the R-code.
+The code is available on [github](https://github.com/oduerr/tf_r/tree/master/load_vgg16). In that directory there is also a python file [`load_vgg16.py`](https://github.com/oduerr/tf_r/tree/master/load_vgg16) for checking the validity of the R-code against the python implementation in which the models are published.
 
 
-As a first step we download the VGG16 weights `vgg_16.tar.gz` from [here](https://github.com/tensorflow/models/blob/master/slim/README.md#Pretrained) and extract it you should get a file named `vgg_16.ckpt` which we will need later.
+As a first step we download the VGG16 weights `vgg_16.tar.gz` from [here](https://github.com/tensorflow/models/blob/master/slim/README.md#Pretrained) and extract it. You should get a file named `vgg_16.ckpt` which we will need later.
 
 ## Building the model
 
-We now define the model. Note that the network is written in the default graph. We do a clean start by resetting the default graph. 
+We now define the model. Note that since the network is written in the default graph, we do a clean start by resetting the default graph. 
 ```{r }
 library(tensorflow)
 slim = tf$contrib$slim #Poor mans import tensorflow.contrib.slim as slim
@@ -29,7 +33,7 @@ tf$reset_default_graph() # Better to start from scratch
 ```
 
 
-We start with a placeholder [tensor](https://rstudio.github.io/tensorflow/using_tensorflow_api.html#tensor_shapes) for  batches (first dimension) of images with arbitrary  size. These images are index by (width, height, color). Since we want to allow images of arbitrary size, we leave the these dimensions open. We do this by setting them to `NULL`. Then these images are then rescaled to the size (224, 224) needed by the network via
+We start with a placeholder [tensor](https://rstudio.github.io/tensorflow/using_tensorflow_api.html#tensor_shapes) in which we later feed the images. The model works on a batch of images and thus needs a tensor of order 4 (an array having 4 indices). The first index of the tensor counts the image number and the second to 4th index  is for the width, height, color. Since we want to allow for an arbitrary number of images of arbitrary size, we leave these dimensions open. We only specify that there should be 3 color channels (rgb). Then these images are rescaled with TensorFlow to the size (224, 224) as needed by the network.
 
 ```{r }
 # Resizing the images
@@ -95,7 +99,7 @@ We start a Session and restore the model weights from the downloaded weight file
 ```
 
 ## Loading the images
-Now it's time to load the image. The values have to be in the range of 0 to 255. Therefore I multiply the values by 255. Further the we need to feed the placeholder Tensor with an array of order 4.
+Now it's time to load the image. The values have to be in the range of 0 to 255. Therefore I multiply the values by 255. Further, we need to feed the placeholder Tensor with an array of order 4.
 ```{r}
 library(jpeg)
 img1 <- readJPEG('apple.jpg')
