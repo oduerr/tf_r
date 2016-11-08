@@ -1,11 +1,15 @@
 Image Classification in R using trained TensorFlow models
 ================
 Oliver Dürr
-11/6/2016
+11/7/2016
+
+Note, this blog also appreared in <http://randomthoughtsonr.blogspot.ch/> and has been reposted in <https://www.r-bloggers.com/>
 
 Recently RStudio has released a [package](https://rstudio.github.io/tensorflow/) that allows to use TensorFlow in R. Also recently several trained models for image classification have been [released](https://github.com/tensorflow/models/blob/master/slim/README.md#Pretrained). In this post I describe how to use the VGG16 model in R to produce an image classification like this:
 
-![](poodle_result.png) (image taken from: <https://www.flickr.com/photos/jonner/487461265>)
+![](poodle_result.png)
+
+(image taken from: <https://www.flickr.com/photos/jonner/487461265>)
 
 The code is available on [github](https://github.com/oduerr/tf_r/tree/master/load_vgg16). In that directory there is also a python file [`load_vgg16.py`](https://github.com/oduerr/tf_r/tree/master/load_vgg16) for checking the validity of the R-code against the python implementation in which the models are published.
 
@@ -152,3 +156,5 @@ ggplot(data.frame(d=1:3)) + annotation_custom(g) +
 ```
 
 ![](VGG16_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+Now since we can load trained models, we can do many cool things like transfer learning etc.. More maybe another time...
