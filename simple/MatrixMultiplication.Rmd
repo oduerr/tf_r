@@ -23,7 +23,7 @@ product = 10*tf$matmul(m1,m2)
 ```
 
 
-In Tensorflow: Executung the graph to the tensor "product"
+In Tensorflow: Executung the graph to the operation "product". This called a **Fetch**
 ```{r}
 sess = tf$Session()
 res = sess$run(product)

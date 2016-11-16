@@ -22,7 +22,7 @@ y_hat <- tf$scalar_mul(a, x) + b
 loss <- tf$reduce_mean((y_hat - y) ^ 2, name='tot_loss')
 
 # Looking at the graph
-tf$train$SummaryWriter('lr/tf_graph_with_loss', tf$get_default_graph())$close()
+tf$train$SummaryWriter('/tmp/dumm/tf_graph_with_loss', tf$get_default_graph())$close()
 
 # Launch the graph and initialize the variables.
 sess = tf$Session()
@@ -35,10 +35,10 @@ mean((1*x_data - y_data)^2)
 
 
 
-optimizer <- tf$train$GradientDescentOptimizer(0.5)
+optimizer <- tf$train$GradientDescentOptimizer(0.5) #<-- And here a miracle happens
 train <- optimizer$minimize(loss) #Adds the loss op to the graph
 
-tf$train$SummaryWriter('lr/tf_graph_with_opt', tf$get_default_graph())$close()
+tf$train$SummaryWriter('/tmp/dumm/tf_graph_with_loss_nun_wirklich', tf$get_default_graph())$close()
     
 sess$run(tf$initialize_all_variables())
 # Fit the line 
