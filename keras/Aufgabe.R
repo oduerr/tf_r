@@ -1,4 +1,3 @@
-# https://github.com/oduerr/tf_r/blob/master/keras/Hello_Keras.R
 ## First Demonstration Notebook on using Keras
 
 if (FALSE){ #First time only for installing stuff
@@ -46,15 +45,14 @@ sqrt(mean((y_hat_lm - y_test)^2))
 
 # A first deep learning model. Stack more Layers!
 model = keras_model_sequential() %>% 
-  layer_dense(units = 64, input_shape = dim(X_train)[2], activation = 'relu') %>%  #We need to define the imput shape
-  layer_dense(units = 64, activation = 'relu') %>% 
+  layer_dense(units = 64, input_shape = dim(X_train)[2], activation = 'sigmoid') %>%  #We need to define the imput shape
+  layer_dense(units = 64, activation = 'sigmoid') %>% 
   layer_dense(units = 1)  
 
-#Before Exucuting how many weights do you aspect
 summary(model) 
 model = compile(model,loss='mse', optimizer = optimizer_rmsprop())
-hist = fit(model, X_train, y_train, epochs = 1000, validation_split = 0.2, verbose=0, shuffle = TRUE)
+hist = fit(model, X_train, y_train, epochs = 500, validation_split = 0.02, verbose=0, shuffle = TRUE)
 #Q: What is epochs what is validation_split
-plot(hist) + ylim(0,40)
+plot(hist) + ylim(0,20)
 y_hat_test = predict(model, X_test)
 sqrt(mean((y_hat_test[,1] - y_test)^2))
