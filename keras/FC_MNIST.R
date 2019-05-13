@@ -38,7 +38,7 @@ dim(x_train)
 
 model <- keras_model_sequential() 
 model %>% 
-  layer_dense(units = 256, activation = "relu", input_shape = c(784)) %>% 
+  layer_dense(units = 256, activation = "sigmoid", input_shape = c(784)) %>% 
   layer_dense(units = 10, activation = "softmax")
 
 summary(model)
@@ -61,11 +61,16 @@ mean(y_hat == mnist$test$y) #Accucary
 
 ########
 # Tasks
-
-# 1) Add a dropout layer, with p=0.3, what is the accuracy you can reach? Compare the loss curves and accuracys. 
+# Do some experiments with the provided code. For all tasks below: compare the
+# learning curves and evaluate the performance (accuracy) on the testset.
+# 
+# 
+# 1) Add a dropout layer, with p=0.3, what is the accuracy you can reach? .
 # 2) Add another layer and compare with your result
-# 3) Investigate wrongly predicted images
-# 4) Do the same analysis on fashion MNIST https://keras.rstudio.com/articles/tutorial_basic_classification.html
+# 3) Change the activation to relu
+# 4) Investigate some wrongly predicted images
+# Optional:
+# 5) Do the same analysis on fashion MNIST https://keras.rstudio.com/articles/tutorial_basic_classification.html
 
 
 
